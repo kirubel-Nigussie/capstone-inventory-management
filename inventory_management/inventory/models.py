@@ -21,3 +21,17 @@ class Inventory(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.quantity} left"
+    
+
+
+
+class InventoryChangeLog(models.Model):
+    item = models.ForeignKey(Inventory, on_delete=models.CASCADE, related_name="change_logs")
+    changed_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    change_type = models.CharField(max_length=20, choices=[('restock', 'Restock'), ('sold', 'Sold')])
+    quantity_change = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.item.name} - {self.change_type} - {self.quantity_change}"
+
